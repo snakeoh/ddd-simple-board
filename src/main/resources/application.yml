@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: ddd-simple-board
+  sql:
+    init:
+      mode: always

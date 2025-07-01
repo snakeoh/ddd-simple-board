@@ -1,0 +1,24 @@
+@startuml
+hide circle
+
+entity "posts" as posts {
+  *post_id : UUID <<PK>>
+  --
+  author_name_value : VARCHAR
+  title : VARCHAR
+  content : TEXT
+  created_at : TIMESTAMP
+  updated_at : TIMESTAMP
+}
+
+entity "comments" as comments {
+  *comment_id : UUID <<PK>>
+  --
+  author_name_value : VARCHAR
+  content : TEXT
+  created_at : TIMESTAMP
+  post_id : UUID <<FK>>
+}
+
+posts ||--o{ comments : "1:N"
+@enduml

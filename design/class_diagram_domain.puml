@@ -1,0 +1,33 @@
+@startuml
+title 도메인 클래스 다이어그램 (Post, Comment)
+
+  class Post {
+    - UUID postId
+    - String title
+    - String content
+    - String authorName
+    - LocalDateTime createdAt
+    - LocalDateTime updatedAt
+    - List<Comment> comments
+    --
+    + addComment(Comment comment)
+    + updateContent(String title, String content)
+  }
+
+  class Comment {
+    - UUID commentId
+    - UUID postId
+    - String content
+    - String authorName
+    - LocalDateTime createdAt
+  }
+
+class AuthorName {
+  String value
+}
+
+Post "1" o-- "*" Comment : comments
+Post --> AuthorName
+Comment --> AuthorName
+
+@enduml

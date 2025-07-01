@@ -1,0 +1,40 @@
+@startuml
+title Spring Boot Layered Architecture
+
+skinparam rectangle {
+  BackgroundColor White
+  BorderColor Black
+  RoundCorner 10
+}
+
+skinparam ArrowColor Black
+skinparam DefaultTextAlignment center
+
+package "Presentation Layer" {
+  [PostController]
+}
+
+package "Application Layer" {
+  [PostService]
+}
+
+package "Domain Layer" {
+  [Post]
+  [AuthorName]
+}
+
+package "Infrastructure Layer" {
+  [PostRepository]
+  [PostgreSQL Database]
+}
+
+' 계층 간 연결
+[PostController] --> [PostService] : calls
+[PostService] --> [Post] : uses
+[PostService] --> [PostRepository] : accesses
+[PostRepository] --> [PostgreSQL Database] : persists to
+
+' VO는 Entity에 의존
+[Post] --> [AuthorName] : has
+
+@enduml
