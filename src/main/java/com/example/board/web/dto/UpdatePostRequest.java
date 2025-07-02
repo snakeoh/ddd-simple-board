@@ -1,7 +1,9 @@
 package com.example.board.web.dto;
 
-public class PostCreateRequest {
-    private String authorName;
+import lombok.Getter;
+
+@Getter
+public class UpdatePostRequest {
     private String title;
     private String content;
 
