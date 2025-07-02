@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.board.domain.entity.Post;
 import com.example.board.domain.vo.AuthorName;
 import com.example.board.service.PostService;
-import com.example.board.web.dto.PostCreateRequest;
+import com.example.board.web.dto.CreatePostRequest;
 import com.example.board.web.dto.PostResponse;
-import com.example.board.web.dto.PostUpdateRequest;
+import com.example.board.web.dto.UpdatePostRequest;
 
 import lombok.RequiredArgsConstructor;
 
@@ -27,7 +27,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<PostResponse> create(@RequestBody PostCreateRequest request) {
+    public ResponseEntity<PostResponse> create(@RequestBody CreatePostRequest request) {
         Post post = postService.createPost(new AuthorName(request.getAuthorName()), request.getTitle(),
                 request.getContent());
         return ResponseEntity.status(201).body(toResponse(post));
@@ -47,7 +47,7 @@ public class PostController {
     }
 
     @PutMapping("/{postId}")
-    public ResponseEntity<PostResponse> update(@PathVariable UUID postId, @RequestBody PostUpdateRequest request) {
+    public ResponseEntity<PostResponse> update(@PathVariable UUID postId, @RequestBody UpdatePostRequest request) {
         Post post = postService.updatePost(postId, request.getTitle(), request.getContent());
         return ResponseEntity.ok(toResponse(post));
     }

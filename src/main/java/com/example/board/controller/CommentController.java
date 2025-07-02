@@ -7,7 +7,9 @@ import com.example.board.domain.vo.AuthorName;
 import com.example.board.service.CommentService;
 import com.example.board.web.dto.CommentResponse;
 import com.example.board.web.dto.CreateCommentRequest;
+import com.example.board.web.dto.UpdateCommentRequest;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -20,6 +22,9 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PutMapping;
+
+// import static com.example.board.web.dto.CommentResponse.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -58,6 +63,16 @@ public class CommentController {
     public ResponseEntity<Void> deleteComment(@PathVariable UUID commentId) {
         commentService.deleteComment(commentId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/comments/{commentId}")
+    public ResponseEntity<CommentResponse> updateComment(
+            @PathVariable UUID commentId,
+            @Valid @RequestBody UpdateCommentRequest request) {
+        Comment update = commentService.updateComment(
+                commentId,
+                request.getContent());
+        return ResponseEntity.ok(CommentResponse.from(update));
     }
 
     private CommentResponse toResponse(Comment comment) {
