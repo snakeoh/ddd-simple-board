@@ -10,6 +10,7 @@ import com.example.board.domain.entity.Post;
 import com.example.board.domain.repository.CommentRepository;
 import com.example.board.domain.repository.PostRepository;
 import com.example.board.domain.vo.AuthorName;
+import com.example.board.exception.CommentNotFoundException;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -40,11 +41,20 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment getComment(UUID commentId) {
         return commentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("댓글이 존재하지 않습니다."));
+                .orElseThrow(() -> new CommentNotFoundException(commentId));
     }
 
     @Override
     public List<Comment> getCommentsByPostId(UUID postId) {
         return commentRepository.findByPostId(postId);
+    }
+
+    @Transactional
+    @Override
+    public Comment updateComment(UUID commentId, String newContent) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException(commentId));
+        comment.updateContent(newContent);
+        return comment;
     }
 }

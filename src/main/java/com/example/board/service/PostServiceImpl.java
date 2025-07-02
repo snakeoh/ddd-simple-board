@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.example.board.domain.entity.Post;
 import com.example.board.domain.repository.PostRepository;
 import com.example.board.domain.vo.AuthorName;
+import com.example.board.exception.PostNotFoundException;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -41,7 +42,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post getPost(UUID postId) {
         return postRepository.findById(postId)
-                .orElseThrow(() -> new IllegalArgumentException("게시글을 찾을 수 없습니다."));
+                .orElseThrow(() -> new PostNotFoundException(postId));
     }
 
     @Override
