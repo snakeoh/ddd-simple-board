@@ -50,4 +50,12 @@ public class PostServiceImpl implements PostService {
         return postRepository.findAll();
     }
 
+    @Override
+    @Transactional
+    public void hidePost(UUID postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new PostNotFoundException(postId));
+        post.hide();
+    }
+
 }

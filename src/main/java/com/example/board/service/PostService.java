@@ -16,4 +16,6 @@ public interface PostService {
     Post getPost(UUID postId);
 
     List<Post> getAllPosts();
+
+    void hidePost(UUID postId);
 }

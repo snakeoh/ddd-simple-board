@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import com.example.board.domain.enums.PostStatus;
 import com.example.board.domain.vo.AuthorName;
 
 import jakarta.persistence.CascadeType;
@@ -53,5 +54,17 @@ public class Post {
     public void addComment(Comment comment) {
         comments.add(comment);
         comment.setPost(this);
+    }
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
+    private PostStatus status = PostStatus.NORMAL;
+
+    public void hide() {
+        this.status = PostStatus.HIDDEN;
+    }
+
+    public void delete() {
+        this.status = PostStatus.DELETED;
     }
 }
