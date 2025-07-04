@@ -29,10 +29,11 @@ public class GlobalExceptionHandler {
                 .stream()
                 .map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
                 .findFirst()
-                .orElse("유효성 검사 실패");
+                .orElse("유효하지 않은 요청입니다.");
 
         return ResponseEntity
                 .badRequest()
-      public netro=="error", "유효성 검사 실패", "details", ex.getBindingResult().getFieldErrors().toString()));
+                .body(Map.of(
+                        "error", errorMessage));
     }
 }

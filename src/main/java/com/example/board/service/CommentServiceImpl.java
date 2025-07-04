@@ -39,6 +39,13 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    public void delete(UUID commentId) {
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new CommentNotFoundException(commentId));
+        commentRepository.delete(comment);
+    }
+
+    @Override
     public Comment getComment(UUID commentId) {
         return commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException(commentId));

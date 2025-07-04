@@ -1,5 +1,6 @@
 package com.example.board.infrastructure.repository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,12 +23,18 @@ public class JpaPostRepository implements PostRepository {
     }
 
     @Override
-    public void save(Post post) {
+    public Post save(Post post) {
         em.persist(post);
+        return post;
     }
 
     @Override
     public void deleteById(UUID postId) {
         findById(postId).ifPresent(em::remove);
+    }
+
+    @Override
+    public List<Post> findAll() {
+        return em.createQuery("SELECT p FROM Post p", Post.class).getResultList();
     }
 }

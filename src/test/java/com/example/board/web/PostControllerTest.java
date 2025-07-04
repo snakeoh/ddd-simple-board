@@ -64,4 +64,16 @@ class PostControllerTest {
 
     }
 
+    @Test
+    @DisplayName("제목이 비어 있을 경우 게시글 작성 실패")
+    void createPost_WithEmptyTitle_shouldReturnBadRequest() throws Exception {
+        CreatePostRequest request = new CreatePostRequest("작성자", "", "내용");
+
+        mockMvc.perform(post("/posts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").value("title: 제목은 필수입니다."));
+    }
+
 }

@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.example.board.domain.entity.Post;
+import com.example.board.domain.enums.PostStatus;
 
 public interface PostRepository {
 
@@ -15,4 +16,8 @@ public interface PostRepository {
     void deleteById(UUID postId);
 
     List<Post> findAll();
+
+    List<Post> findAllByStatus(PostStatus status);
+
+    Optional<Post> findByPostIdAndStatus(UUID postId, PostStatus status);
 }

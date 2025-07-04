@@ -10,6 +10,7 @@ import com.example.board.web.dto.CreatePostRequest;
 import com.example.board.web.dto.PostResponse;
 import com.example.board.web.dto.UpdatePostRequest;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -27,7 +28,7 @@ public class PostController {
     private final PostService postService;
 
     @PostMapping
-    public ResponseEntity<PostResponse> create(@RequestBody CreatePostRequest request) {
+    public ResponseEntity<PostResponse> create(@Valid @RequestBody CreatePostRequest request) {
         Post post = postService.createPost(new AuthorName(request.getAuthorName()), request.getTitle(),
                 request.getContent());
         return ResponseEntity.status(201).body(toResponse(post));
@@ -55,6 +56,12 @@ public class PostController {
     @DeleteMapping("/{postId}")
     public ResponseEntity<Void> delete(@PathVariable UUID postId) {
         postService.deletePost(postId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{postId}/hide")
+    public ResponseEntity<Void> hidePost(@PathVariable UUID postId) {
+        postService.hidePost(postId);
         return ResponseEntity.noContent().build();
     }
 
