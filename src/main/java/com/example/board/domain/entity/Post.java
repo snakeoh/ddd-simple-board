@@ -60,11 +60,18 @@ public class Post {
     @Column(name = "status", nullable = false)
     private PostStatus status = PostStatus.NORMAL;
 
-    public void hide() {
-        this.status = PostStatus.HIDDEN;
-    }
+    // public void hide() {
+    // this.status = PostStatus.HIDDEN;
+    // }
 
     public void delete() {
         this.status = PostStatus.DELETED;
+    }
+
+    @Column(nullable = false)
+    private boolean visible = true;
+
+    public void hide() {
+        this.visible = false;
     }
 }

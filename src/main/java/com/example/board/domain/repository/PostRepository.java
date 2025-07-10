@@ -20,4 +20,6 @@ public interface PostRepository {
     List<Post> findAllByStatus(PostStatus status);
 
     Optional<Post> findByPostIdAndStatus(UUID postId, PostStatus status);
+
+    List<Post> findByVisibleTrueOrderByCreatedAtDesc();
 }

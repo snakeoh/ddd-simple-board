@@ -4,7 +4,27 @@ spring:
   sql:
     init:
       mode: always
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
 
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+
+jwt:
+  secret: "ThisIsASecretKeyForJwtSigningWhichShouldBeLongEnough"
+  expiration: 3600000 # 1 hour in milliseconds

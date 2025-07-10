@@ -11,6 +11,7 @@ import com.example.board.domain.repository.CommentRepository;
 import com.example.board.domain.repository.PostRepository;
 import com.example.board.domain.vo.AuthorName;
 import com.example.board.exception.CommentNotFoundException;
+import com.example.board.exception.UnauthorizedAccessException;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -58,9 +59,20 @@ public class CommentServiceImpl implements CommentService {
 
     @Transactional
     @Override
-    public Comment updateComment(UUID commentId, String newContent) {
+    // public Comment updateComment(UUID commentId, String newContent) {
+    // Comment comment = commentRepository.findById(commentId)
+    // .orElseThrow(() -> new CommentNotFoundException(commentId));
+    // comment.updateContent(newContent);
+    // return comment;
+    // }
+    public Comment updateComment(UUID commentId, String currentUsername, String newContent) {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new CommentNotFoundException(commentId));
+
+        if (!comment.getAuthorName().getValue().equals(currentUsername)) {
+            throw new UnauthorizedAccessException("작성자만 댓글을 수정할 수 있습니다.");
+        }
+
         comment.updateContent(newContent);
         return comment;
     }

@@ -17,5 +17,6 @@ public interface CommentService {
 
     List<Comment> getCommentsByPostId(UUID postId);
 
-    Comment updateComment(UUID commentId, String newContent);
+    // Comment updateComment(UUID commentId, String newContent);
+    Comment updateComment(UUID commentId, String currentUsername, String newContent);
 }

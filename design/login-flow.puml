@@ -1,0 +1,14 @@
+@startuml
+actor User
+participant "Client (웹/앱)" as Client
+participant "Spring Boot API" as API
+database "User DB" as DB
+
+User -> Client : 로그인 정보 입력
+Client -> API : POST /auth/login\n(username, password)
+API -> DB : 사용자 조회 by username
+DB --> API : 사용자 정보 (User)
+API -> API : 비밀번호 확인 (SHA-256)
+API -> API : JWT 토큰 생성
+API -> Client : 200 OK + token
+@enduml

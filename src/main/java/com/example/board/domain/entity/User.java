@@ -34,7 +34,7 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    public User(String username, String password, String email, Role role) {
+    public User(String username, String password, Role role) {
         this.userId = UUID.randomUUID();
         this.username = username;
         this.password = password;

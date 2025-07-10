@@ -10,6 +10,8 @@ import com.example.board.web.dto.CreatePostRequest;
 import com.example.board.web.dto.PostResponse;
 import com.example.board.web.dto.UpdatePostRequest;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -18,8 +20,12 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+@SecurityRequirement(name = "bearerAuth")
+@Tag(name = "게시글 API", description = "게시글 관련 API입니다.")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/posts")
@@ -48,9 +54,14 @@ public class PostController {
     }
 
     @PutMapping("/{postId}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<PostResponse> update(@PathVariable UUID postId, @RequestBody UpdatePostRequest request) {
-        Post post = postService.updatePost(postId, request.getTitle(), request.getContent());
-        return ResponseEntity.ok(toResponse(post));
+
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        // PostResponse updated = postService.updatePost(postId, request.getTitle(),
+        // request.getContent());
+        PostResponse updated = postService.updatePost(postId, currentUsername, request);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{postId}")

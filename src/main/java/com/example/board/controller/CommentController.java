@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -60,6 +62,7 @@ public class CommentController {
     }
 
     @DeleteMapping("/comments/{commentId}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteComment(@PathVariable UUID commentId) {
         commentService.deleteComment(commentId);
         return ResponseEntity.noContent().build();
@@ -71,13 +74,23 @@ public class CommentController {
         return ResponseEntity.noContent().build();
     }
 
+    // @PutMapping("/comments/{commentId}")
+    // public ResponseEntity<CommentResponse> updateComment(
+    // @PathVariable UUID commentId,
+    // @Valid @RequestBody UpdateCommentRequest request) {
+    // Comment update = commentService.updateComment(
+    // commentId,
+    // request.getContent());
+    // return ResponseEntity.ok(CommentResponse.from(update));
+    // }
     @PutMapping("/comments/{commentId}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<CommentResponse> updateComment(
             @PathVariable UUID commentId,
             @Valid @RequestBody UpdateCommentRequest request) {
-        Comment update = commentService.updateComment(
-                commentId,
-                request.getContent());
+
+        String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
+        Comment update = commentService.updateComment(commentId, currentUsername, request.getContent());
         return ResponseEntity.ok(CommentResponse.from(update));
     }
 
