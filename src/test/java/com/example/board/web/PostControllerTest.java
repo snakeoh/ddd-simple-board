@@ -2,6 +2,8 @@ package com.example.board.web;
 
 import java.util.UUID;
 
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.example.board.repository.UserRepository;
+import com.example.board.security.JwtTokenProvider;
+import com.example.board.security.Sha256PasswordEncoder;
 import com.example.board.web.dto.CreatePostRequest;
+import com.example.board.domain.entity.User;
+import com.example.board.domain.enums.Role;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -27,6 +34,25 @@ class PostControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private Sha256PasswordEncoder sha256;
+
+    @Autowired
+    private JwtTokenProvider jwtTokenProvider;
+
+    @BeforeEach
+    void setUp() {
+        // 사용자 생성
+        userRepository.save(new User("user1", sha256.encode("pass"), Role.USER));
+        userRepository.save(new User("admin", sha256.encode("pass"), Role.ADMIN));
+
+        String userToken = jwtTokenProvider.generateToken("user1", Role.USER.name());
+        String adminToken = jwtTokenProvider.generateToken("admin", Role.ADMIN.name());
+    }
 
     @Test
     @DisplayName("게시글 생성 테스트")
