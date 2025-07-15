@@ -3,7 +3,6 @@ package com.example.board.service;
 import java.util.List;
 import java.util.UUID;
 
-import org.hibernate.sql.Update;
 import org.springframework.stereotype.Service;
 
 import com.example.board.domain.entity.Post;

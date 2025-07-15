@@ -1,7 +1,6 @@
 package com.example.board.utils;
 
 import java.util.Date;
-import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
@@ -9,6 +8,8 @@ import com.example.board.domain.enums.Role;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import javax.crypto.spec.SecretKeySpec;
+import javax.crypto.SecretKey;
 
 @Component
 public class JwtUtil {
@@ -16,14 +17,13 @@ public class JwtUtil {
     private final long expiration = 3600000; // 1 hour in milliseconds
 
     public String generateToken(String userName, Role role) {
-        // Logic to generate JWT token using the secret and expiration time
-        // This is a placeholder; implement your JWT generation logic here
+        SecretKey key = new SecretKeySpec(secret.getBytes(), SignatureAlgorithm.HS256.getJcaName());
         return Jwts.builder()
                 .setSubject(userName)
                 .claim("role", role)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
-                .signWith(SignatureAlgorithm.HS256, secret.getBytes())
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 }

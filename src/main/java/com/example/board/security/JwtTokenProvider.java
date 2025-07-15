@@ -11,9 +11,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
-import com.example.board.domain.entity.User;
-import com.example.board.domain.enums.Role;
-
 import jakarta.annotation.PostConstruct;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -85,7 +82,7 @@ public class JwtTokenProvider {
                 .setSubject(username)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
+                .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
 

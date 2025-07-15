@@ -1,10 +1,5 @@
 package com.example.board.service;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,7 +7,6 @@ import com.example.board.domain.entity.User;
 import com.example.board.repository.UserRepository;
 import com.example.board.security.JwtTokenProvider;
 import com.example.board.security.Sha256PasswordEncoder;
-import com.example.board.utils.JwtUtil;
 
 @Service
 public class AuthService {
@@ -21,7 +15,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     // private final JwtUtil jwtUtil;
-    private static JwtTokenProvider jwtTokenProvider;
+    private final JwtTokenProvider jwtTokenProvider;
 
     public AuthService(UserRepository userRepository, JwtTokenProvider jwtTokenProvider) {
         this.userRepository = userRepository;

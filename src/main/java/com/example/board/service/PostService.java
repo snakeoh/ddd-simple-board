@@ -3,8 +3,6 @@ package com.example.board.service;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import com.example.board.domain.entity.Post;
 import com.example.board.domain.vo.AuthorName;
 import com.example.board.web.dto.PostResponse;

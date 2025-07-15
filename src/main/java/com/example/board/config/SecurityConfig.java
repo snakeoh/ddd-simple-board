@@ -1,9 +1,5 @@
 package com.example.board.config;
 
-import java.security.Security;
-
-import org.springframework.boot.autoconfigure.couchbase.CouchbaseProperties.Authentication;
-import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,7 +12,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.example.board.security.JwtAuthenticationFilter;
-import com.example.board.security.JwtTokenProvider;
 import com.example.board.security.Sha256PasswordEncoder;
 
 import lombok.RequiredArgsConstructor;

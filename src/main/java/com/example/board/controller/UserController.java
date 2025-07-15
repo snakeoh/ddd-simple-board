@@ -1,8 +1,5 @@
 package com.example.board.controller;
 
-import java.sql.Ref;
-
-import org.springframework.boot.autoconfigure.data.redis.RedisProperties.Lettuce.Cluster.Refresh;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,16 +13,12 @@ import com.example.board.security.JwtTokenProvider;
 import com.example.board.service.UserService;
 import com.example.board.web.dto.CreateUserRequest;
 import com.example.board.web.dto.LoginRequest;
-import com.example.board.web.dto.LoginResponse;
 import com.example.board.web.dto.MeResponse;
 import com.example.board.web.dto.RefreshRequest;
 import com.example.board.web.dto.TokenPair;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")

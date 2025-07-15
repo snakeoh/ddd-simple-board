@@ -13,7 +13,9 @@ public interface CommentRepository extends JpaRepository<Comment, UUID> {
 
     Optional<Comment> findById(UUID commentId);
 
-    Comment save(Comment comment);
+    // The save method is inherited from JpaRepository and does not need to be
+    // redeclared.
+    // Comment save(Comment comment);
 
     void deleteById(UUID commentId);
 }
