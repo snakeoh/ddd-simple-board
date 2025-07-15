@@ -1,5 +1,6 @@
+// import { isLoggedIn } from "../utils/auth";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
 
 type Comment = {
     commentId: string;
@@ -16,8 +17,7 @@ export default function CommentList({ postId }: Props) {
     const [comments, setComments] = useState<Comment[]>([]);
 
     useEffect(() => {
-        axios
-            .get(`/api/posts/${postId}/comments`)
+        api.get(`/api/posts/${postId}/comments`)
             .then((response) => setComments(response.data))
             .catch((error) => console.error("댓글 불러오기 실패:", error));
     }, [postId]);

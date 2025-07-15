@@ -3,9 +3,12 @@
 // import viteLogo from "/vite.svg";
 // import "./App.css";
 // ///////////////////////////////////////////
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import LoginPage from "./pages/LoginPage";
 import PostDetailPage from "./pages/PostDetailPage";
 import PostListPage from "./pages/PostListPage";
+// import { ErrorBoundary } from "./components/ErrorBoundary";
 
 function App() {
     // const [count, setCount] = useState(0);
@@ -34,11 +37,23 @@ function App() {
     //     </p>
     //   </>
     // )
+    const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem("accessToken") !== null);
+
+    useEffect(() => {
+        const handleStorage = () => {
+            setIsLoggedIn(localStorage.getItem("accessToken") !== null);
+        };
+        window.addEventListener("storage", handleStorage);
+        return () => window.removeEventListener("storage", handleStorage);
+    }, []);
+
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<PostListPage />} />
-                <Route path="/posts/:postId" element={<PostDetailPage />} />
+                <Route path="/" element={isLoggedIn ? <Navigate to="/posts" /> : <LoginPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/posts" element={isLoggedIn ? <PostListPage /> : <Navigate to="/" />} />
+                <Route path="/posts/:postId" element={isLoggedIn ? <PostDetailPage /> : <Navigate to="/" />} />
             </Routes>
         </BrowserRouter>
     );

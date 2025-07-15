@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/axios";
 import CommentList from "../components/CommentList";
 
 type Post = {
@@ -17,8 +17,7 @@ export default function PostDetailPage() {
     const [post, setPost] = useState<Post | null>(null);
 
     useEffect(() => {
-        axios
-            .get(`/api/posts/${postId}`)
+        api.get(`/api/posts/${postId}`)
             .then((response) => setPost(response.data))
             .catch((error) => console.error("게시글 불러오기 실패:", error));
     }, [postId]);

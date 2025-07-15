@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "../api/axios";
+import { Link } from "react-router-dom";
 
 type Post = {
     postId: string;
@@ -9,15 +10,16 @@ type Post = {
 };
 
 export default function PostListPage() {
-    const { data, isLoading } = useQuery<Post[]>({
+    const { data, isLoading, error } = useQuery<Post[]>({
         queryKey: ["posts"],
         queryFn: async () => {
-            const response = await api.get("/posts");
+            const response = await api.get("/api/posts");
             return response.data;
         },
     });
 
     if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>에러가 발생했습니다: {(error as Error).message}</div>;
 
     return (
         <div>
@@ -25,7 +27,11 @@ export default function PostListPage() {
             <ul>
                 {data?.map((post) => (
                     <li key={post.postId}>
-                        <b>{post.title}</b> - {post.authorName} -
+                        <Link to={`/posts/${post.postId}`}>
+                            <b>{post.title}</b>
+                        </Link>
+                        {" - "}
+                        {post.authorName}
                     </li>
                 ))}
             </ul>
