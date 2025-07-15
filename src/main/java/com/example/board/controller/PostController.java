@@ -1,8 +1,5 @@
 package com.example.board.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.board.domain.entity.Post;
 import com.example.board.domain.vo.AuthorName;
 import com.example.board.service.PostService;
@@ -15,6 +12,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -33,6 +31,7 @@ public class PostController {
 
     private final PostService postService;
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping
     public ResponseEntity<PostResponse> create(@Valid @RequestBody CreatePostRequest request) {
         Post post = postService.createPost(new AuthorName(request.getAuthorName()), request.getTitle(),
@@ -54,12 +53,17 @@ public class PostController {
     }
 
     @PutMapping("/{postId}")
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<PostResponse> update(@PathVariable UUID postId, @RequestBody UpdatePostRequest request) {
+    @PreAuthorize("#author == authentication.name or hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<PostResponse> update(@PathVariable UUID postId, @RequestBody UpdatePostRequest request,
+            @RequestParam String author) throws AccessDeniedException {
 
         String currentUsername = SecurityContextHolder.getContext().getAuthentication().getName();
         // PostResponse updated = postService.updatePost(postId, request.getTitle(),
         // request.getContent());
+        Post post = postService.getPost(postId);
+        if (!post.getAuthorName().equals(currentUsername)) {
+            throw new AccessDeniedException("작성사 본인만 수정할 수 있습니다.");
+        }
         PostResponse updated = postService.updatePost(postId, currentUsername, request);
         return ResponseEntity.ok(updated);
     }
@@ -68,6 +72,11 @@ public class PostController {
     public ResponseEntity<Void> delete(@PathVariable UUID postId) {
         postService.deletePost(postId);
         return ResponseEntity.noContent().build();
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<?> adminDeletePost() {
+        return null;
     }
 
     @PatchMapping("/{postId}/hide")

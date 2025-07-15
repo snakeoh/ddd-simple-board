@@ -2,9 +2,17 @@ package com.example.board.security;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+
+import com.example.board.domain.entity.User;
+import com.example.board.domain.enums.Role;
 
 import jakarta.annotation.PostConstruct;
 import io.jsonwebtoken.*;
@@ -70,8 +78,15 @@ public class JwtTokenProvider {
     }
 
     public String generateRefreshToken(String username) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'generateRefreshToken'");
+        Date now = new Date();
+        Date expiryDate = new Date(now.getTime() + 1 * 60 * 60 * 1000); // 1시간
+
+        return Jwts.builder()
+                .setSubject(username)
+                .setIssuedAt(now)
+                .setExpiration(expiryDate)
+                .signWith(SignatureAlgorithm.HS256, secretKey.getBytes())
+                .compact();
     }
 
     public String extractUsername(String refreshToken) {
@@ -84,5 +99,21 @@ public class JwtTokenProvider {
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    public List<GrantedAuthority> getAuthorities(String token) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+        String role = claims.get("role", String.class);
+        return List.of(new SimpleGrantedAuthority(role));
+    }
+
+    public Authentication getAuthentication(String token) {
+        String username = getUsername(token);
+        UserPrincipal userPrincipal = new UserPrincipal(username);
+        return new UsernamePasswordAuthenticationToken(userPrincipal, token, null);
     }
 }

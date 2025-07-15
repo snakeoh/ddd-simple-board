@@ -1,9 +1,8 @@
 package com.example.board.controller;
 
-import org.springframework.web.bind.annotation.RestController;
-
 import com.example.board.domain.entity.Comment;
 import com.example.board.domain.vo.AuthorName;
+import com.example.board.security.UserPrincipal;
 import com.example.board.service.CommentService;
 import com.example.board.web.dto.CommentResponse;
 import com.example.board.web.dto.CreateCommentRequest;
@@ -17,19 +16,15 @@ import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.*;
 
 // import static com.example.board.web.dto.CommentResponse.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class CommentController {
 
     private final CommentService commentService;
@@ -37,7 +32,8 @@ public class CommentController {
     @PostMapping("/posts/{postId}/comments")
     public ResponseEntity<CommentResponse> createComment(
             @PathVariable UUID postId,
-            @Valid @RequestBody CreateCommentRequest request) {
+            @Valid @RequestBody CreateCommentRequest request,
+            @AuthenticationPrincipal UserPrincipal user) {
 
         Comment comment = commentService.createComment(
                 postId,
@@ -68,11 +64,11 @@ public class CommentController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/comments/{commentId}")
-    public ResponseEntity<Void> delete(@PathVariable UUID commentId) {
-        commentService.delete(commentId);
-        return ResponseEntity.noContent().build();
-    }
+    // @DeleteMapping("/comments/{commentId}")
+    // public ResponseEntity<Void> delete(@PathVariable UUID commentId) {
+    // commentService.delete(commentId);
+    // return ResponseEntity.noContent().build();
+    // }
 
     // @PutMapping("/comments/{commentId}")
     // public ResponseEntity<CommentResponse> updateComment(

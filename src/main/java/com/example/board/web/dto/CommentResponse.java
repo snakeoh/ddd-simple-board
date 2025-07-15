@@ -8,6 +8,7 @@ import com.example.board.domain.entity.Comment;
 import lombok.Builder;
 
 @Builder
+// public record CommentResponse(
 public record CommentResponse(
         UUID commentId,
         String authorName,

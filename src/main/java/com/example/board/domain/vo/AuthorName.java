@@ -2,6 +2,7 @@ package com.example.board.domain.vo;
 
 import java.util.Objects;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,6 +14,7 @@ import lombok.AccessLevel;
 @Embeddable
 public class AuthorName {
 
+    @Column(name = "author_name")
     private String value;
 
     private static final int MAX_LENGTH = 50;

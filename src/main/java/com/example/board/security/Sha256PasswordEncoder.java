@@ -5,7 +5,9 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Component;
 
+@Component
 public class Sha256PasswordEncoder implements PasswordEncoder {
 
     @Override

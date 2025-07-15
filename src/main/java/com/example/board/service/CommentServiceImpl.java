@@ -54,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<Comment> getCommentsByPostId(UUID postId) {
-        return commentRepository.findByPostId(postId);
+        return commentRepository.findByPostPostId(postId);
     }
 
     @Transactional

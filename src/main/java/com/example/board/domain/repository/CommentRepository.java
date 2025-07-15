@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.example.board.domain.entity.Comment;
 
 public interface CommentRepository extends JpaRepository<Comment, UUID> {
-    List<Comment> findByPostId(UUID postId);
+    List<Comment> findByPostPostId(UUID postId);
 
     Optional<Comment> findById(UUID commentId);
 
