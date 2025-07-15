@@ -1,9 +1,13 @@
 spring:
   application:
     name: ddd-simple-board
+  main:
+    lazy-initialization: false # 간헐적으로 schema 생성을 지연시킬 수 있음.
   sql:
     init:
       mode: always
+      continue-on-error: false
+      encoding: UTF-8
   datasource:
     url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
     driver-class-name: org.h2.Driver
@@ -14,8 +18,11 @@ spring:
       enabled: true
       path: /h2-console
   jpa:
+    deferred-datasource-initialization: true
+    # deferred-datasource-initialization-matches: true
     hibernate:
-      ddl-auto: update
+      # ddl-auto: update
+      ddl-auto: create
     show-sql: true
     properties:
       hibernate:
@@ -26,5 +33,5 @@ springdoc:
     path: /swagger-ui.html
 
 jwt:
-  secret: "ThisIsASecretKeyForJwtSigningWhichShouldBeLongEnough"
+  secret: "ThisIsASecretKeyForJwtSigningWhichShouldBeLongEnoughAndAtLeast64CharactersLong_0123456789abcdefg"
   expiration: 3600000 # 1 hour in milliseconds
