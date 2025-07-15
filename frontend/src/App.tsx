@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import PostDetailPage from "./pages/PostDetailPage";
 import PostListPage from "./pages/PostListPage";
+import Header from "./components/Header";
 // import { ErrorBoundary } from "./components/ErrorBoundary";
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
 
     return (
         <BrowserRouter>
+            <Header />
             <Routes>
                 <Route path="/" element={isLoggedIn ? <Navigate to="/posts" /> : <LoginPage />} />
                 <Route path="/login" element={<LoginPage />} />

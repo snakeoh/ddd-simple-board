@@ -18,7 +18,6 @@ import com.example.board.web.dto.RefreshRequest;
 import com.example.board.web.dto.TokenPair;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
